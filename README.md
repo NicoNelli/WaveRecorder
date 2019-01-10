@@ -8,7 +8,7 @@ User: root
 
 Password: gr**l
 
-## How to run:
+## How to run the ortopillar:
 
 1. First terminal(real time controller):
 ```
@@ -43,7 +43,12 @@ homing(to set all the joint zeros)
 
 To set joint positions/velocities: JVEL/JVELALL and JMOVE/JMOVEALL
 
-### SETUP:
+### WAVES SOFTWARE:
+```
+run read executable
+```
+
+### SETUP FOR ORTOPILLAR:
 
 Initial position for the waves:
 ```
