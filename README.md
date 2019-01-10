@@ -45,7 +45,7 @@ To set joint positions/velocities: JVEL/JVELALL and JMOVE/JMOVEALL
 
 ### WAVES SOFTWARE:
 ```
-run read executable
+compile the package and run read executable
 ```
 
 ### SETUP FOR ORTOPILLAR:
