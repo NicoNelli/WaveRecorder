@@ -8,7 +8,7 @@
 #include "utils/TimeHelpers.hpp"
 #include "utils/QtTcpSender.hpp"
 #define MIN_ALPHA 0.05
-#define MAX_ALPHA 1.0
+#define MAX_ALPHA 0.72
 #define J_OFF -0.08
 #define L_ARM 0.7
 typedef std::vector<std::string> stringv_t;
@@ -20,7 +20,7 @@ double string2Double(std::string);
 bool calculateAlpha(double&,double,double);
 
 int main(int argc, char** argv){
-    const std::string logPath = "../log/";
+    const std::string logPath = "../log/"; //insert the correct path
     std::string fd = "1";
 
     //Manage args
@@ -38,7 +38,7 @@ int main(int argc, char** argv){
     }
 
     //Playback, paths were recorded at 20Hz
-    Spinner sp(7);
+    Spinner sp(20);
     TimeManager tm;
 
     //Some time helpers
@@ -49,7 +49,7 @@ int main(int argc, char** argv){
     sock.connect();
     if(sock.isConnected()){
         std::cout << "sending def position" << std::endl;
-        doublev_t* defPosition = new doublev_t{2.9, -1, 0.93, 0, 0, 0};
+        doublev_t* defPosition = new doublev_t{2.9, -0.73, 0.68, 0, 0, 0};
         sock.reference(defPosition);
         sock.sendOverTcp();
         usleep((useconds_t)(5 / MICRO2SECS));
@@ -68,6 +68,9 @@ int main(int argc, char** argv){
 
     std::cout << "starting" << std::endl;
     tm.updateTimer();
+    
+    double start = tm._actualTime;
+
     bool sent = true;
     while (sp.ok() && l<path.size() && sock.isConnected()){
         /*
@@ -79,7 +82,8 @@ int main(int argc, char** argv){
         if(calculateAlpha(a,path[l++],h0)){
 
             sock.reference()[1] = a;
-            sock.reference()[2] = -a + J_OFF;
+            sock.reference()[2] = -a + J_OFF + 0.08*sin( 1.1*(tm._actualTime - start)*tm.toSecs()); //pitch
+            sock.reference()[3] = 0.08*sin( 1.1*(tm._actualTime - start)*tm.toSecs()); //roll
             sock.sendOverTcp();
             std::cout << a << std::endl;
         }
